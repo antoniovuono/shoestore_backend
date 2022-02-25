@@ -1,29 +1,24 @@
 import { Router } from "express";
-import { v4 as uuidv4 } from "uuid";
 
-import { Shoes } from "../modules/shoes/entities/Shoes";
+import { ShoesRepository } from "../modules/shoes/repositories/implementations/ShoesRepository";
 
 const shoesRouter = Router();
 
-const shoes = [];
+const shoesRepository = new ShoesRepository();
 
 shoesRouter.post("/", (request, response) => {
-  const { name, brand, price, description, size } = request.body;
+  const { name, brand, price, description, size, created_at } = request.body;
 
-  const createShoes: Shoes = {
-    id: uuidv4(),
+  shoesRepository.create({
     name,
     brand,
     price,
     description,
     size,
-    created_at: new Date(),
-    updated_at: new Date(),
-  };
+    created_at,
+  });
 
-  shoes.push(createShoes);
-
-  return response.status(201).json(createShoes);
+  return response.status(201).send();
 });
 
 export { shoesRouter };
